@@ -14,7 +14,9 @@
 
         <field name="nonce" column="nonce" type="string"/>
 
-        <many-to-one field="app" target-entity="BgOauthProvider\Entity\App"/>
+        <many-to-one field="app" target-entity="BgOauthProvider\Entity\App">
+            <join-column name="app_id" referenced-column-name="id"  on-delete="CASCADE"/>
+        </many-to-one>
 
     </entity>
 

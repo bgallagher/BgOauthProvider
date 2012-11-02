@@ -22,10 +22,12 @@
 
 
         <many-to-one field="user" target-entity="ZfcUserDoctrineORM\Entity\User">
-            <join-column name="user_id" referenced-column-name="user_id"/>
+            <join-column name="user_id" referenced-column-name="user_id"  on-delete="CASCADE"/>
         </many-to-one>
 
-        <many-to-one field="app" target-entity="BgOauthProvider\Entity\App"/>
+        <many-to-one field="app" target-entity="BgOauthProvider\Entity\App">
+            <join-column name="app_id" referenced-column-name="id"  on-delete="CASCADE"/>
+        </many-to-one>
 
     </entity>
 
