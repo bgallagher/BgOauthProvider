@@ -18,6 +18,6 @@ It is still a WIP, any input or pull request are welcomed.
 ```php
 'BgOauthAcl' => array(
     array('routeName' => 'api/endpoint', 'role' => '3l', 'method' => array('post')),
-    array('routeName' => 'api/endpoint/another', 'role' => '3l', 'method' => array('delete')),
+    array('routeName' => 'api/endpoint/another', 'role' => '2l', 'method' => array('delete')),
 ),
 ```
