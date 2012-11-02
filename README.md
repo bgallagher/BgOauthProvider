@@ -5,7 +5,7 @@ A ZF2 OAuth 1.0a provider module (WIP)
 
 This module allows your ZF2 app to act as an OAuth 1.0a Provider, allowing you to protect you api endpoints with OAuth.
 
-It is still a WIP, any input or pull request are welcomed.
+It is still a WIP, any input or pull request are very much welcomed.
 
 ## Requirements
 ### ZF2 modules: 
