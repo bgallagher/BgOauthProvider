@@ -8,10 +8,13 @@ This module allows your ZF2 app to act as an OAuth 1.0a Provider, allowing you t
 It is still a WIP, any input or pull request are welcomed.
 
 ## Requirements
-
+### ZF2 modules: 
 * [ZfcBase](https://github.com/ZF-Commons/ZfcBase) (latest master).
 * [ZfcUser](https://github.com/ZF-Commons/ZfcUser) (latest master).
 * [ZfcUserDoctrineORM](https://github.com/ZF-Commons/ZfcUserDoctrineORM) (latest master).
+
+### Pecl Extensions
+* [Pecl OAuth](http://pecl.php.net/package/oauth) ().
 
 ## Config Example
 
