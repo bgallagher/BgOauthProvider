@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="BgOauthProvider\Entity\AppNonce" table="app_nonce">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="timestamp" column="timestamp" type="datetime"/>
+
+        <field name="nonce" column="nonce" type="string"/>
+
+        <many-to-one field="app" target-entity="BgOauthProvider\Entity\App"/>
+
+    </entity>
+
+</doctrine-mapping>
