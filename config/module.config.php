@@ -5,7 +5,7 @@ namespace BgOauthProvider;
 return array(
     'controllers' => array(
         'invokables' => array(
-            'BgOauthProvider\Controller\Oauth' => 'BgOauthProvider\Controller\OauthController',
+            //'BgOauthProvider\Controller\Oauth' => 'BgOauthProvider\Controller\OauthController',
         ),
     ),
     'router' => array(
@@ -57,7 +57,7 @@ return array(
     ),
     'view_manager' => array(
         'template_path_stack' => array(
-            'ZendSkeletonModule' => __DIR__ . '/../view',
+            'bgoauthprovider' => __DIR__ . '/../view',
         ),
     ),
     'doctrine' => array(

@@ -2,11 +2,23 @@
 
 namespace BgOauthProvider\Controller;
 
+use BgOauthProvider\Oauth\Provider as OauthProvider;
+use BgOauthProvider\Service\Oauth as OauthService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 
 class OauthController extends AbstractActionController
 {
+
+    /**
+     * @var OauthProvider
+     */
+    protected $oauthProvider;
+
+    /**
+     * @var OauthService
+     */
+    protected $oauthService;
 
     public function indexAction()
     {
@@ -22,7 +34,7 @@ class OauthController extends AbstractActionController
 
     public function requestTokenAction()
     {
-        $oauthProvider = $this->getServiceLocator()->get('BgOauthProvider');
+        $oauthProvider = $this->getOauthProvider();
         $response = $this->getResponse();
 
         try {
@@ -54,8 +66,8 @@ class OauthController extends AbstractActionController
 
     public function authorizeAction()
     {
-        $oauthService = $this->getServiceLocator()->get('BgOauthService');
-        $oauthProvider = $this->getServiceLocator()->get('BgOauthProvider');
+        $oauthService = $this->getOauthService();
+        $oauthProvider = $this->getOauthProvider();
 
         $request = $this->getRequest();
 
@@ -139,7 +151,7 @@ class OauthController extends AbstractActionController
 
     public function accessTokenAction()
     {
-        $oauthProvider = $this->getServiceLocator()->get('BgOauthProvider');
+        $oauthProvider = $this->getOauthProvider();
         $response = $this->getResponse();
 
         try {
@@ -165,5 +177,41 @@ class OauthController extends AbstractActionController
 
         return $response;
     }
+
+    /**
+     * @param \BgOauthProvider\Service\Oauth $oauthService
+     */
+    public function setOauthService(OauthService $oauthService)
+    {
+        $this->oauthService = $oauthService;
+    }
+
+    /**
+     * @return \BgOauthProvider\Service\Oauth
+     */
+    public function getOauthService()
+    {
+        return $this->oauthService;
+    }
+
+
+
+    /**
+     * @param \BgOauthProvider\Oauth\Provider $oauthProvider
+     */
+    public function setOauthProvider(OauthProvider $oauthProvider)
+    {
+        $this->oauthProvider = $oauthProvider;
+    }
+
+    /**
+     * @return \BgOauthProvider\Oauth\Provider
+     */
+    public function getOauthProvider()
+    {
+        return $this->oauthProvider;
+    }
+
+
 
 }

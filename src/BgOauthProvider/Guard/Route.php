@@ -36,7 +36,7 @@ class Route implements ListenerAggregateInterface
         $request = $mvcEvent->getRequest();
         $response = $mvcEvent->getResponse();
 
-        $app = $mvcEvent->getTarget();
+        $app = $mvcEvent->getApplication();
         $match = $app->getMvcEvent()->getRouteMatch();
         $routeName = $match->getMatchedRouteName();
         $method = strtolower($request->getMethod());
@@ -78,6 +78,7 @@ class Route implements ListenerAggregateInterface
             return $response;
         }
 
+        //Unreachable (I think).
         if (!$this->acl->isAllowed($role, $routeName, $method)) {
 
             $responseBody = array();

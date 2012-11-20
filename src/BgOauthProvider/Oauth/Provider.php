@@ -18,8 +18,11 @@ use \OAuthProvider;
 class Provider
 {
 
+    /**
+     * @var \BgOauthProvider\Entity\App;
+     */
     public $app;
-    public $client;
+    public $user;
     public $token;
 
     protected $oauthService;

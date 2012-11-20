@@ -4,14 +4,16 @@ namespace BgOauthProvider;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Controller\ControllerManager;
 
 
 class Module implements AutoloaderProviderInterface, ServiceProviderInterface
 {
 
-    public function onBootstrap($event)
+    public function onBootstrap(MvcEvent $event)
     {
-        $app = $event->getTarget();
+        $app = $event->getApplication();
         $events = $app->getEventManager();
         $sm = $app->getServiceManager();
 
@@ -76,6 +78,23 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
             ),
             'shared' => array(
                 'BgTokenEntityConcrete' => false,
+            ),
+        );
+    }
+
+    public function getControllerConfig()
+    {
+        return array(
+            'factories' => array(
+                'BgOauthProvider\Controller\Oauth' => function(ControllerManager $controllerManager) {
+                    $serviceManager = $controllerManager->getServiceLocator();
+
+                    $controller = new \BgOauthProvider\Controller\OauthController();
+                    $controller->setOauthService($serviceManager->get('BgOauthService'));
+                    $controller->setOauthProvider($serviceManager->get('BgOauthProvider'));
+
+                    return $controller;
+                }
             ),
         );
     }

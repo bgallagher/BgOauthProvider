@@ -13,13 +13,11 @@ class App implements AppInterface
 
     private $consumer_secret;
 
-    private $app_name;
+    private $name;
 
     private $description;
 
-    private $base_url;
-
-    private $app_hash;
+    private $url;
 
     private $status;
 
@@ -83,9 +81,9 @@ class App implements AppInterface
      * @param string $appName
      * @return App
      */
-    public function setAppName($appName)
+    public function setName($appName)
     {
-        $this->app_name = $appName;
+        $this->name = $appName;
         return $this;
     }
 
@@ -94,9 +92,9 @@ class App implements AppInterface
      *
      * @return string
      */
-    public function getAppName()
+    public function getName()
     {
-        return $this->app_name;
+        return $this->name;
     }
 
     /**
@@ -127,9 +125,9 @@ class App implements AppInterface
      * @param string $baseUrl
      * @return App
      */
-    public function setBaseUrl($baseUrl)
+    public function setUrl($baseUrl)
     {
-        $this->base_url = $baseUrl;
+        $this->url = $baseUrl;
         return $this;
     }
 
@@ -138,31 +136,9 @@ class App implements AppInterface
      *
      * @return string
      */
-    public function getBaseUrl()
+    public function getUrl()
     {
-        return $this->base_url;
-    }
-
-    /**
-     * Set app_hash
-     *
-     * @param string $appHash
-     * @return App
-     */
-    public function setAppHash($appHash)
-    {
-        $this->app_hash = $appHash;
-        return $this;
-    }
-
-    /**
-     * Get app_hash
-     *
-     * @return string
-     */
-    public function getAppHash()
-    {
-        return $this->app_hash;
+        return $this->url;
     }
 
     /**

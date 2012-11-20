@@ -14,13 +14,11 @@
 
         <field name="consumer_secret" column="consumer_secret" type="string"/>
 
-        <field name="app_name" column="app_name" type="string"/>
+        <field name="name" column="name" type="string"/>
 
         <field name="description" column="description" type="string"/>
 
-        <field name="base_url" column="base_url" type="string"/>
-
-        <field name="app_hash" column="app_hash" type="string"/>
+        <field name="url" column="url" type="string"/>
 
         <field name="status" column="status" type="smallint"/>
 
