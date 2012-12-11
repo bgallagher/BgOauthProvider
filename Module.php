@@ -17,7 +17,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
         $events = $app->getEventManager();
         $sm = $app->getServiceManager();
 
-        $events->attach($sm->get('BgOauthRouteGuard'));
+        $events->attach($sm->get('BgOauthProvider\RouteGuard'));
     }
 
     public function getAutoloaderConfig()
@@ -43,41 +43,41 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
     {
         return array(
             'factories' => array(
-                'BgOauthService' => function ($serviceLocator) {
+                'BgOauthProvider\OauthService' => function ($serviceLocator) {
                     return new \BgOauthProvider\Service\Oauth(
                         $serviceLocator->get('doctrine.entitymanager.orm_default')
                     );
                 },
-                'BgAppService' => function ($serviceLocator) {
+                'BgOauthProvider\AppService' => function ($serviceLocator) {
                     return new \BgOauthProvider\Service\App(
                         $serviceLocator->get('doctrine.entitymanager.orm_default')
                     );
                 },
-                'BgOauthProvider' => function ($serviceLocator) {
+                'BgOauthProvider\OauthProvider' => function ($serviceLocator) {
                     return new \BgOauthProvider\Oauth\Provider(
-                        $serviceLocator->get('BgOauthService'),
-                        $serviceLocator->get('BgAppService'),
-                        $serviceLocator->get('BgTokenEntityConcrete')
+                        $serviceLocator->get('BgOauthProvider\OauthService'),
+                        $serviceLocator->get('BgOauthProvider\AppService'),
+                        $serviceLocator->get('BgOauthProvider\TokenEntity')
                     );
                 },
-                'BgOauthAcl' => function ($serviceLocator) {
+                'BgOauthProvider\Acl' => function ($serviceLocator) {
                     $config = $serviceLocator->get('Configuration');
                     $aclConfig = array_key_exists('BgOauthAcl', $config) ? $config['BgOauthAcl'] : array();
 
                     return new \BgOauthProvider\Acl($aclConfig);
                 },
-                'BgOauthRouteGuard' => function ($serviceLocator) {
+                'BgOauthProvider\RouteGuard' => function ($serviceLocator) {
                     return new \BgOauthProvider\Guard\Route(
-                        $serviceLocator->get('BgOauthAcl'),
-                        $serviceLocator->get('BgOauthProvider')
+                        $serviceLocator->get('BgOauthProvider\Acl'),
+                        $serviceLocator->get('BgOauthProvider\OauthProvider')
                     );
                 },
             ),
             'invokables' => array(
-                'BgTokenEntityConcrete' => 'BgOauthProvider\Entity\Token',
+                'BgOauthProvider\TokenEntity' => 'BgOauthProvider\Entity\Token',
             ),
             'shared' => array(
-                'BgTokenEntityConcrete' => false,
+                'BgOauthProvider\TokenEntity' => false,
             ),
         );
     }
@@ -90,8 +90,8 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                     $serviceManager = $controllerManager->getServiceLocator();
 
                     $controller = new \BgOauthProvider\Controller\OauthController();
-                    $controller->setOauthService($serviceManager->get('BgOauthService'));
-                    $controller->setOauthProvider($serviceManager->get('BgOauthProvider'));
+                    $controller->setOauthService($serviceManager->get('BgOauthProvider\OauthService'));
+                    $controller->setOauthProvider($serviceManager->get('BgOauthProvider\OauthProvider'));
 
                     return $controller;
                 }

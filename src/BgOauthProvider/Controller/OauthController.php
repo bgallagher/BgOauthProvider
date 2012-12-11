@@ -77,6 +77,8 @@ class OauthController extends AbstractActionController
             return $this->getResponse()->setContent('oauth_token not found');
         }
 
+        $hasIdentity = $this->zfcUserAuthentication()->getAuthService()->hasIdentity();
+
         $app = $token->getApp();
 
         /**
@@ -95,7 +97,14 @@ class OauthController extends AbstractActionController
                 'label' => 'deny',
             )
         ));
-        $form->get("submit")->setLabel("allow");
+
+        if ($hasIdentity) {
+            $form->get("submit")->setLabel('allow');
+            $form->remove('identity');
+            $form->remove('credential');
+        } else {
+            $form->get("submit")->setLabel('login and allow');
+        }
 
 
         if ($request->isPost()) {
@@ -104,13 +113,15 @@ class OauthController extends AbstractActionController
                 die('denied');
             }
 
-            if (!$this->zfcUserAuthentication()->getAuthService()->hasIdentity()) {
+            if (!$hasIdentity) {
 
                 $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
-                $result = $adapter->prepareForAuthentication($request);
-
+                $adapter->prepareForAuthentication($request);
                 $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
 
+                /**
+                 * This needs to change!
+                 */
                 if (!$auth->isValid()) {
                     $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage($this->failedLoginMessage);
                     $adapter->resetAdapters();
@@ -146,6 +157,7 @@ class OauthController extends AbstractActionController
 
         return array(
             'authenticationForm' => $form,
+            'app' => $app,
         );
     }
 
@@ -195,7 +207,6 @@ class OauthController extends AbstractActionController
     }
 
 
-
     /**
      * @param \BgOauthProvider\Oauth\Provider $oauthProvider
      */
@@ -211,7 +222,6 @@ class OauthController extends AbstractActionController
     {
         return $this->oauthProvider;
     }
-
 
 
 }

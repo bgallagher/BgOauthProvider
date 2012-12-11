@@ -4,16 +4,16 @@ namespace BgOauthProvider;
 
 return array(
     'controllers' => array(
-        'invokables' => array(
-            //'BgOauthProvider\Controller\Oauth' => 'BgOauthProvider\Controller\OauthController',
+        'invokables' => array(),
+        'factories' => array(//See ../Module.php
         ),
     ),
     'router' => array(
         'routes' => array(
-            'sfoauthprovider' => array(
+            'bgoauthprovider' => array(
                 'type' => 'literal',
                 'options' => array(
-                    'route' => '/oauth/v1.0a',
+                    'route' => '/oauth',
                     'constraints' => array(),
                     'defaults' => array(
                         'controller' => 'BgOauthProvider\Controller\Oauth',
@@ -21,33 +21,41 @@ return array(
                     ),
                 ),
                 'child_routes' => array(
-                    'request_token' => array(
-                        'type' => 'Literal',
+                    'v1' => array(
+                        'type' => 'literal',
                         'options' => array(
-                            'route' => '/request_token',
-                            'defaults' => array(
-                                'controller' => 'BgOauthProvider\Controller\Oauth',
-                                'action' => 'requestToken',
-                            ),
+                            'route' => '/v1.0a',
                         ),
-                    ),
-                    'authorize' => array(
-                        'type' => 'Literal',
-                        'options' => array(
-                            'route' => '/authorize',
-                            'defaults' => array(
-                                'controller' => 'BgOauthProvider\Controller\Oauth',
-                                'action' => 'authorize',
+                        'child_routes' => array(
+                            'request_token' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/request_token',
+                                    'defaults' => array(
+                                        'controller' => 'BgOauthProvider\Controller\Oauth',
+                                        'action' => 'requestToken',
+                                    ),
+                                ),
                             ),
-                        ),
-                    ),
-                    'access_token' => array(
-                        'type' => 'Literal',
-                        'options' => array(
-                            'route' => '/access_token',
-                            'defaults' => array(
-                                'controller' => 'BgOauthProvider\Controller\Oauth',
-                                'action' => 'accessToken',
+                            'authorize' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/authorize',
+                                    'defaults' => array(
+                                        'controller' => 'BgOauthProvider\Controller\Oauth',
+                                        'action' => 'authorize',
+                                    ),
+                                ),
+                            ),
+                            'access_token' => array(
+                                'type' => 'Literal',
+                                'options' => array(
+                                    'route' => '/access_token',
+                                    'defaults' => array(
+                                        'controller' => 'BgOauthProvider\Controller\Oauth',
+                                        'action' => 'accessToken',
+                                    ),
+                                ),
                             ),
                         ),
                     ),

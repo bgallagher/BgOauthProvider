@@ -10,7 +10,7 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="consumer_key" column="consumer_key" type="string"/>
+        <field name="consumer_key" column="consumer_key" type="string" unique="true"/>
 
         <field name="consumer_secret" column="consumer_secret" type="string"/>
 
