@@ -20,6 +20,8 @@ class OauthController extends AbstractActionController
      */
     protected $oauthService;
 
+    protected $failedLoginMessage = 'Authentication failed. Please try again.';
+
     public function indexAction()
     {
 
@@ -71,7 +73,11 @@ class OauthController extends AbstractActionController
 
         $request = $this->getRequest();
 
-        $token = $oauthService->findToken($request->getQuery()->get('oauth_token'));
+        //die($request->getQuery()->get('oauth_token'));
+
+        $oauth_token = $request->getQuery()->get('oauth_token');
+
+        $token = $oauthService->findToken($oauth_token);
 
         if (!$token) {
             return $this->getResponse()->setContent('oauth_token not found');
@@ -106,6 +112,14 @@ class OauthController extends AbstractActionController
             $form->get("submit")->setLabel('login and allow');
         }
 
+        
+        $fm = $this->flashMessenger()->setNamespace('bgoauthprovider-authorisation-form')->getMessages();
+        if (isset($fm[0])) {
+            $form->setMessages(
+                array('identity' => array($fm[0]))
+            );
+        }
+
 
         if ($request->isPost()) {
 
@@ -123,9 +137,12 @@ class OauthController extends AbstractActionController
                  * This needs to change!
                  */
                 if (!$auth->isValid()) {
-                    $this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage($this->failedLoginMessage);
+                    $this->flashMessenger()->setNamespace('bgoauthprovider-authorisation-form')->addMessage($this->failedLoginMessage);
                     $adapter->resetAdapters();
-                    return $this->redirect()->toUrl($this->url()->fromRoute('sfoauthprovider/authorize'));
+                    return $this->redirect()->toUrl(
+                        $this->url()->fromRoute('bgoauthprovider/v1/authorize')
+                        . '?' . http_build_query(array('oauth_token' => $oauth_token))
+                    );
                 }
 
             }
