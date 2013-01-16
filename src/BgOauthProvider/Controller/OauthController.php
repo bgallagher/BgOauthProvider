@@ -73,8 +73,6 @@ class OauthController extends AbstractActionController
 
         $request = $this->getRequest();
 
-        //die($request->getQuery()->get('oauth_token'));
-
         $oauth_token = $request->getQuery()->get('oauth_token');
 
         $token = $oauthService->findToken($oauth_token);
@@ -112,7 +110,7 @@ class OauthController extends AbstractActionController
             $form->get("submit")->setLabel('login and allow');
         }
 
-        
+
         $fm = $this->flashMessenger()->setNamespace('bgoauthprovider-authorisation-form')->getMessages();
         if (isset($fm[0])) {
             $form->setMessages(
