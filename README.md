@@ -9,7 +9,6 @@ It is still a WIP, any input or pull request are very much welcomed.
 
 ## Requirements
 ### ZF2 modules: 
-* [ZfcBase](https://github.com/ZF-Commons/ZfcBase) (latest master)
 * [ZfcUser](https://github.com/ZF-Commons/ZfcUser) (latest master)
 * [ZfcUserDoctrineORM](https://github.com/ZF-Commons/ZfcUserDoctrineORM) (latest master)
 
