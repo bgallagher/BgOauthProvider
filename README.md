@@ -20,11 +20,11 @@ It is still a WIP, any input or pull request are very much welcomed.
 
 1. Add this project to your composer.json file.
 
-```json
-"require": {
-        "bgallagher/bgoauthprovider": "dev-master"
-    }
-```
+        ```json
+        "require": {
+                "bgallagher/bgoauthprovider": "dev-master"
+            }
+        ```
 
 2. php composer.php update
 
