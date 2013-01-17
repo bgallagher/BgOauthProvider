@@ -16,6 +16,16 @@ It is still a WIP, any input or pull request are very much welcomed.
 ### Pecl Extensions
 * [Pecl OAuth](http://pecl.php.net/package/oauth)
 
+##Installation
+
+1. Add this project to your composer.json file.
+```json
+"require": {
+        "bgallagher/bgoauthprovider": "dev-master"
+    }
+```
+2. php composer.php update
+
 ## Config Example
 
 ```php
