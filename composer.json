@@ -20,6 +20,9 @@
     "autoload": {
         "psr-0": {
             "BgOauthProvider": "src/"
-        }
+        },
+        "classmap": [
+            "./Module.php"
+        ]
     }
 }
