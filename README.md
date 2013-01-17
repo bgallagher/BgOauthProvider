@@ -26,7 +26,7 @@ It is still a WIP, any input or pull request are very much welcomed.
     }
     ```
 
-2. php composer.php update
+2. php composer.phar update
 
 ## Config Example
 
