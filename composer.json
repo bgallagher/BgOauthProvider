@@ -1,0 +1,29 @@
+{
+    "name": "bgallagher/bgoauthprovider",
+    "type": "library",
+    "description": "ZF2 OAuth 1.0a Provider module",
+    "keywords": ["oauth","oauth provider", "zf2"],
+    "homepage": "https://github.com/bgallagher/BgOauthProvider",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brian Gallagher",
+            "email": "gallagher.brian@gmail.com",
+            "homepage": "http://briangallagher.ie"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "2.*",
+        "zf-commons/zfc-user": "dev-master",
+        "ext-oauth": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "BgOauthProvider": "src/"
+        },
+        "classmap": [
+            "./"
+        ]
+    }
+}
