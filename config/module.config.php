@@ -5,7 +5,8 @@ namespace BgOauthProvider;
 return array(
     'controllers' => array(
         'invokables' => array(),
-        'factories' => array(//See ../Module.php
+        'factories' => array(
+            //See ../Module.php
         ),
     ),
     'router' => array(
