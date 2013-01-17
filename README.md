@@ -9,7 +9,6 @@ It is still a WIP, any input or pull request are very much welcomed.
 
 ## Requirements
 ### ZF2 modules: 
-* [ZfcBase](https://github.com/ZF-Commons/ZfcBase) (latest master)
 * [ZfcUser](https://github.com/ZF-Commons/ZfcUser) (latest master)
 * [ZfcUserDoctrineORM](https://github.com/ZF-Commons/ZfcUserDoctrineORM) (latest master)
 
@@ -18,7 +17,7 @@ It is still a WIP, any input or pull request are very much welcomed.
 
 ##Installation
 
-1. Add this project to your composer.json file.
+1. Add the module to your composer.json requirments.
 
     ```json
     "require": {
@@ -27,6 +26,8 @@ It is still a WIP, any input or pull request are very much welcomed.
     ```
 
 2. php composer.phar update
+
+3. Add "BgOauthProvider" to your application.config.php file.
 
 ## Config Example
 
