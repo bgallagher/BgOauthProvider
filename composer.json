@@ -18,6 +18,9 @@
         "zf-commons/zfc-user": "dev-master"
     },
     "autoload": {
+        "psr-0": {
+            "BgOauthProvider": "src/"
+        },
         "classmap": [
             "./Module.php"
         ]
