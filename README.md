@@ -25,7 +25,7 @@ It is still a WIP, any input or pull request are very much welcomed.
     }
     ```
 
-2. php composer.phar update
+2. composer.phar update
 
 3. Add "BgOauthProvider" to your application.config.php file.
 
