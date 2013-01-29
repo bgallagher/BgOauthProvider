@@ -173,6 +173,7 @@ class OauthController extends AbstractActionController
         return array(
             'authenticationForm' => $form,
             'app' => $app,
+            'registerUrl' => $this->url()->fromRoute('zfcuser/register') . '?redirect=' . $this->url()->fromRoute('bgoauthprovider/v1/authorize') . '?' . $_SERVER['QUERY_STRING'],
         );
     }
 
