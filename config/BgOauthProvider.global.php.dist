@@ -1,0 +1,13 @@
+<?php
+
+return array(
+
+    'bgoauthprovider' => array(
+        'disable_layout_on_authorisation_page' => true,
+
+        'acl_config' => array(
+            //examples : https://github.com/bgallagher/BgOauthProvider#config-example
+        ),
+    ),
+
+);
