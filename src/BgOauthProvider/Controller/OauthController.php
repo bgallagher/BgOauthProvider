@@ -184,7 +184,7 @@ class OauthController extends AbstractActionController
         ));
 
         $viewModel->setTerminal(
-            $this->getOptions()->getDisableLayoutOnAuthenticationPage()
+            $this->getOptions()->getDisableLayoutOnAuthorisationPage()
         );
 
         return $viewModel;

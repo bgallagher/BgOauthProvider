@@ -9,24 +9,24 @@ class ModuleOptions extends AbstractOptions
     /**
      * @var bool
      */
-    protected $disableLayoutOnAuthenticationPage = false;
+    protected $disableLayoutOnAuthorisationPage = false;
 
     protected $aclConfig = array();
 
     /**
-     * @param boolean $disableLayoutOnAuthenticationPage
+     * @param boolean $disableLayoutOnAuthorisationPage
      */
-    public function setDisableLayoutOnAuthenticationPage($disableLayoutOnAuthenticationPage)
+    public function setDisableLayoutOnAuthorisationPage($disableLayoutOnAuthorisationPage)
     {
-        $this->disableLayoutOnAuthenticationPage = $disableLayoutOnAuthenticationPage;
+        $this->disableLayoutOnAuthorisationPage = $disableLayoutOnAuthorisationPage;
     }
 
     /**
      * @return boolean
      */
-    public function getDisableLayoutOnAuthenticationPage()
+    public function getDisableLayoutOnAuthorisationPage()
     {
-        return $this->disableLayoutOnAuthenticationPage;
+        return $this->disableLayoutOnAuthorisationPage;
     }
 
     public function setAclConfig(array $aclConfig)
