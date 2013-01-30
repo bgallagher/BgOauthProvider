@@ -32,8 +32,18 @@ It is still a WIP, any input or pull request are very much welcomed.
 ## Config Example
 
 ```php
-'BgOauthAcl' => array(
-    array('routeName' => 'api/endpoint', 'role' => '3l', 'method' => array('post')),
-    array('routeName' => 'api/endpoint/another', 'role' => '2l', 'method' => array('delete')),
-),
+<?php
+
+return array(
+
+    'bgoauthprovider' => array(
+        'disable_layout_on_authorisation_page' => true,
+
+        'acl_config' => array(
+            array('routeName' => 'api/endpoint', 'role' => '3l', 'method' => array('post')),
+            array('routeName' => 'api/endpoint/another', 'role' => '2l', 'method' => array('delete')),
+        ),
+    ),
+
+);
 ```
