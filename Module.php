@@ -43,6 +43,10 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
     {
         return array(
             'factories' => array(
+                'BgOauthProvider\Options' => function ($sm) {
+                    $config = $sm->get('Config');
+                    return new Options\ModuleOptions(isset($config['bgoauthprovider']) ? $config['bgoauthprovider'] : array());
+                },
                 'BgOauthProvider\OauthService' => function ($serviceLocator) {
                     return new \BgOauthProvider\Service\Oauth(
                         $serviceLocator->get('doctrine.entitymanager.orm_default')
@@ -61,8 +65,8 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                     );
                 },
                 'BgOauthProvider\Acl' => function ($serviceLocator) {
-                    $config = $serviceLocator->get('Configuration');
-                    $aclConfig = array_key_exists('BgOauthAcl', $config) ? $config['BgOauthAcl'] : array();
+
+                    $aclConfig = $serviceLocator->get('BgOauthProvider\Options')->getAclConfig();
 
                     return new \BgOauthProvider\Acl($aclConfig);
                 },
@@ -92,6 +96,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                     $controller = new \BgOauthProvider\Controller\OauthController();
                     $controller->setOauthService($serviceManager->get('BgOauthProvider\OauthService'));
                     $controller->setOauthProvider($serviceManager->get('BgOauthProvider\OauthProvider'));
+                    $controller->setOptions($serviceManager->get('BgOauthProvider\Options'));
 
                     return $controller;
                 }

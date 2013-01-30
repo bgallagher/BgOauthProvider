@@ -4,8 +4,10 @@ namespace BgOauthProvider\Controller;
 
 use BgOauthProvider\Oauth\Provider as OauthProvider;
 use BgOauthProvider\Service\Oauth as OauthService;
+use BgOauthProvider\Options\ModuleOptions;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class OauthController extends AbstractActionController
 {
@@ -19,6 +21,11 @@ class OauthController extends AbstractActionController
      * @var OauthService
      */
     protected $oauthService;
+
+    /**
+     * @var ModuleOptions;
+     */
+    protected $options;
 
     protected $failedLoginMessage = 'Authentication failed. Please try again.';
 
@@ -139,7 +146,7 @@ class OauthController extends AbstractActionController
                     $adapter->resetAdapters();
                     return $this->redirect()->toUrl(
                         $this->url()->fromRoute('bgoauthprovider/v1/authorize')
-                        . '?' . http_build_query(array('oauth_token' => $oauth_token))
+                            . '?' . http_build_query(array('oauth_token' => $oauth_token))
                     );
                 }
 
@@ -170,11 +177,17 @@ class OauthController extends AbstractActionController
 
         }
 
-        return array(
+        $viewModel = new ViewModel(array(
             'authenticationForm' => $form,
             'app' => $app,
             'registerUrl' => $this->url()->fromRoute('zfcuser/register') . '?redirect=' . $this->url()->fromRoute('bgoauthprovider/v1/authorize') . '?' . $_SERVER['QUERY_STRING'],
+        ));
+
+        $viewModel->setTerminal(
+            $this->getOptions()->getDisableLayoutOnAuthenticationPage()
         );
+
+        return $viewModel;
     }
 
     public function accessTokenAction()
@@ -239,5 +252,19 @@ class OauthController extends AbstractActionController
         return $this->oauthProvider;
     }
 
+    /**
+     * @param \BgOauthProvider\Options\ModuleOptions $options
+     */
+    public function setOptions(ModuleOptions $options)
+    {
+        $this->options = $options;
+    }
 
+    /**
+     * @return \BgOauthProvider\Options\ModuleOptions
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 }
