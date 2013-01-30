@@ -180,7 +180,7 @@ class OauthController extends AbstractActionController
         $viewModel = new ViewModel(array(
             'authenticationForm' => $form,
             'app' => $app,
-            'registerUrl' => $this->url()->fromRoute('zfcuser/register') . '?redirect=' . $this->url()->fromRoute('bgoauthprovider/v1/authorize') . '?' . $_SERVER['QUERY_STRING'],
+            'registerUrl' => $this->url()->fromRoute('zfcuser/register') . '?redirect=' . urlencode($this->url()->fromRoute('bgoauthprovider/v1/authorize') . '?' . $_SERVER['QUERY_STRING']),
         ));
 
         $viewModel->setTerminal(
