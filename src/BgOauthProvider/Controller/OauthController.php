@@ -181,6 +181,7 @@ class OauthController extends AbstractActionController
             'authenticationForm' => $form,
             'app' => $app,
             'registerUrl' => $this->url()->fromRoute('zfcuser/register') . '?redirect=' . urlencode($this->url()->fromRoute('bgoauthprovider/v1/authorize') . '?' . $_SERVER['QUERY_STRING']),
+            'logoutUrl' => $this->url()->fromRoute('zfcuser/logout') . '?redirect=' . urlencode($this->url()->fromRoute('bgoauthprovider/v1/authorize') . '?' . $_SERVER['QUERY_STRING']),
         ));
 
         $viewModel->setTerminal(

@@ -11,6 +11,9 @@ class ModuleOptions extends AbstractOptions
      */
     protected $disableLayoutOnAuthorisationPage = false;
 
+    /**
+     * @var array
+     */
     protected $aclConfig = array();
 
     /**
@@ -29,11 +32,17 @@ class ModuleOptions extends AbstractOptions
         return $this->disableLayoutOnAuthorisationPage;
     }
 
-    public function setAclConfig(array $aclConfig)
+    /**
+     * @param array $aclConfig
+     */
+    public function setAclConfig($aclConfig)
     {
         $this->aclConfig = $aclConfig;
     }
 
+    /**
+     * @return array
+     */
     public function getAclConfig()
     {
         return $this->aclConfig;
