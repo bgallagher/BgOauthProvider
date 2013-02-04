@@ -35,7 +35,7 @@ class ModuleOptions extends AbstractOptions
     /**
      * @param array $aclConfig
      */
-    public function setAclConfig($aclConfig)
+    public function setAclConfig(array $aclConfig)
     {
         $this->aclConfig = $aclConfig;
     }
