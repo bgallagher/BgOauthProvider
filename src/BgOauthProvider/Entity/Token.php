@@ -3,7 +3,7 @@
 namespace BgOauthProvider\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ZfcUserDoctrineORM\Entity\User;
+use ZfcUser\Entity\User;
 
 class Token implements TokenInterface
 {
@@ -146,10 +146,10 @@ class Token implements TokenInterface
     /**
      * Set user
      *
-     * @param ZfcUserDoctrineORM\Entity\User $user
+     * @param User $user
      * @return Token
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
         return $this;
@@ -158,7 +158,7 @@ class Token implements TokenInterface
     /**
      * Get user
      *
-     * @return ZfcUserDoctrineORM\Entity\User
+     * @return User
      */
     public function getUser()
     {

@@ -2,6 +2,8 @@
 
 namespace BgOauthProvider\Entity;
 
+use ZfcUser\Entity\User;
+
 interface TokenInterface
 {
 
@@ -34,7 +36,7 @@ interface TokenInterface
 
     public function getApp();
 
-    public function setUser($user);
+    public function setUser(User $user);
 
     public function getUser();
 

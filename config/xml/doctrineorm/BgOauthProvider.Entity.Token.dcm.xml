@@ -21,7 +21,7 @@
         <field name="verifier" column="verifier" type="string" nullable="true"/>
 
 
-        <many-to-one field="user" target-entity="ZfcUserDoctrineORM\Entity\User">
+        <many-to-one field="user" target-entity="ZfcUser\Entity\User">
             <join-column name="user_id" referenced-column-name="user_id"  on-delete="CASCADE"/>
         </many-to-one>
 
