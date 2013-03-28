@@ -4,8 +4,9 @@ namespace BgOauthProvider\Guard;
 
 use BgOauthProvider\Acl as BgOauthProviderAcl;
 use BgOauthProvider\Oauth\Provider as BgOauthProvider;
-use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
+use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 
 class Route implements ListenerAggregateInterface
@@ -14,6 +15,8 @@ class Route implements ListenerAggregateInterface
     protected $acl;
     protected $oauthProvider;
     protected $listener;
+
+    const ERROR = 'error-unauthorized-oauth-request';
 
     public function __construct(BgOauthProviderAcl $acl, BgOAuthProvider $oauthProvider)
     {
@@ -68,30 +71,21 @@ class Route implements ListenerAggregateInterface
             $this->oauthProvider->checkOAuthRequest();
         } catch (\OAuthException $e) {
 
-            $error = \OAuthProvider::reportProblem($e);
-            $response->setStatusCode(400);
+            $error = \OAuthProvider::reportProblem($e, false);
+            $response->setStatusCode(Response::STATUS_CODE_401);
             $response->setContent($error);
-            $response->getHeaders()->addHeaders(array(
-                'WWW-Authenticate' => $error,
-            ));
+            $response->getHeaders()->addHeaders(
+                array(
+                    'WWW-Authenticate' => $error,
+                )
+            );
+
+            $mvcEvent->setError(self::ERROR);
+            $mvcEvent->getApplication()->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $mvcEvent);
 
             return $response;
         }
 
-        //Unreachable (I think).
-        if (!$this->acl->isAllowed($role, $routeName, $method)) {
-
-            $responseBody = array();
-            $responseBody['error'] = 'Not Authorised';
-            $responseBody['request'] = $request->getRequestUri();
-
-            $response->setStatusCode(401);
-            $response->setContent(json_encode($responseBody));
-            $response->setHeaders($response->getHeaders()->addHeaderLine('Content-Type', 'application/json'));
-
-            return $response;
-
-        }
-
+        //Success!
     }
 }
