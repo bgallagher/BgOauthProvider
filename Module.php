@@ -51,7 +51,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                 'BgOauthProvider\OauthService' => function (ServiceManager $serviceLocator) {
                     return new \BgOauthProvider\Service\Oauth(
                         $serviceLocator->get('BgOauthProvider\Mapper\AppNonce'),
-                        $serviceLocator->get('doctrine.entitymanager.orm_default')
+                        $serviceLocator->get('BgOauthProvider\Mapper\Token')
                     );
                 },
                 'BgOauthProvider\AppService' => function (ServiceManager $serviceLocator) {
@@ -79,6 +79,11 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                 },
                 'BgOauthProvider\Mapper\AppNonce' => function (ServiceManager $serviceLocator) {
                     return new \BgOauthProvider\Mapper\Doctrine\AppNonce(
+                        $serviceLocator->get('doctrine.entitymanager.orm_default')
+                    );
+                },
+                'BgOauthProvider\Mapper\Token' => function (ServiceManager $serviceLocator) {
+                    return new \BgOauthProvider\Mapper\Doctrine\Token(
                         $serviceLocator->get('doctrine.entitymanager.orm_default')
                     );
                 },

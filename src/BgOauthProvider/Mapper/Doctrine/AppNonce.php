@@ -4,9 +4,9 @@ namespace BgOauthProvider\Mapper\Doctrine;
 
 use BgOauthProvider\Entity\AppNonce as AppNonceEntity;
 use BgOauthProvider\Mapper\AppNonceInterface;
+use DateTime;
 use Doctrine\Common\Persistence\ObjectManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use DateTime;
 
 class AppNonce implements AppNonceInterface, ObjectManagerAwareInterface
 {

@@ -6,6 +6,7 @@ use BgOauthProvider\Entity\AppNonce;
 use BgOauthProvider\Entity\Token;
 use Doctrine\ORM\EntityManager;
 use BgOauthProvider\Mapper\AppNonceInterface as AppNonceMapper;
+use BgOauthProvider\Mapper\TokenInterface as TokenMapper;
 
 class Oauth implements OauthInterface
 {
@@ -15,12 +16,16 @@ class Oauth implements OauthInterface
      */
     protected $appNounceMapper;
 
+    /**
+     * @var TokenMapper
+     */
+    protected $tokenMapper;
 
-    public function __construct(AppNonceMapper $appNounceMapper, EntityManager $em)
+
+    public function __construct(AppNonceMapper $appNounceMapper, TokenMapper $tokenMapper)
     {
-        $this->setEm($em);
-
         $this->appNounceMapper = $appNounceMapper;
+        $this->tokenMapper = $tokenMapper;
     }
 
     public function findNonce($appId, $nonce, \DateTime $dateTime)
@@ -35,43 +40,20 @@ class Oauth implements OauthInterface
 
     public function saveToken(Token $token)
     {
-        return $this->updateToken($token);
+        return $this->tokenMapper->insert($token);
     }
 
     public function updateToken(Token $token)
     {
-        $this->getEm()->persist($token);
-        $this->getEm()->flush();
+        $this->tokenMapper->update($token);
     }
 
+    /**
+     * @param string $token
+     * @return \BgOauthProvider\Entity\TokenInterface|null
+     */
     public function findToken($token)
     {
-        return $this->getEm()->getRepository('BgOauthProvider\Entity\Token')->findOneBy(array('token' => $token));
-    }
-
-
-
-
-
-
-    /**
-     * @depricated
-     */
-    protected $em;
-
-    /**
-     * @depricated
-     */
-    public function getEm()
-    {
-        return $this->em;
-    }
-
-    /**
-     * @depricated
-     */
-    public function setEm(EntityManager $em)
-    {
-        $this->em = $em;
+        return $this->tokenMapper->findByToken($token);
     }
 }
