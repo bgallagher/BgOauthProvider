@@ -16,6 +16,9 @@ class Token implements TokenInterface, ObjectManagerAwareInterface
      */
     protected $objectManager;
 
+    /**
+     * @param ObjectManager $objectManager
+     */
     public function __construct(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
