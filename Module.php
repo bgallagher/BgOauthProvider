@@ -61,8 +61,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                 'BgOauthProvider\OauthProvider' => function (ServiceManager $serviceLocator) {
                     return new \BgOauthProvider\Oauth\Provider(
                         $serviceLocator->get('BgOauthProvider\OauthService'),
-                        $serviceLocator->get('BgOauthProvider\AppService'),
-                        $serviceLocator->get('BgOauthProvider\TokenEntity')
+                        $serviceLocator->get('BgOauthProvider\AppService')
                     );
                 },
                 'BgOauthProvider\Acl' => function (ServiceManager $serviceLocator) {
@@ -77,13 +76,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                         $serviceLocator->get('BgOauthProvider\OauthProvider')
                     );
                 },
-            ),
-            'invokables' => array(
-                'BgOauthProvider\TokenEntity' => 'BgOauthProvider\Entity\Token',
-            ),
-            'shared' => array(
-                'BgOauthProvider\TokenEntity' => false,
-            ),
+            )
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace BgOauthProvider\Oauth;
 
+use BgOauthProvider\Entity\Token;
 use \BgOauthProvider\Service\OauthInterface;
 use \BgOauthProvider\Service\AppInterface;
 use \BgOauthProvider\Entity\AppNonce;
@@ -34,11 +35,11 @@ class Provider
      * @param \BgOauthProvider\Service\AppInterface $appService
      * @param \BgOauthProvider\Entity\TokenInterface $token
      */
-    public function __construct(OauthInterface $oauthService, AppInterface $appService, TokenInterface $token)
+    public function __construct(OauthInterface $oauthService, AppInterface $appService)
     {
         $this->setOauthService($oauthService);
         $this->setAppService($appService);
-        $this->token = $token;
+        $this->token = new Token();
     }
 
     private function _getProvider()
