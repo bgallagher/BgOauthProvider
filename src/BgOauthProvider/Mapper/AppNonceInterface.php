@@ -2,7 +2,7 @@
 
 namespace BgOauthProvider\Mapper;
 
-use BgOauthProvider\Entity\AppNonce;
+use BgOauthProvider\Entity\AppNonce as AppNonceEntity;
 use DateTime;
 
 interface AppNonceInterface
@@ -12,15 +12,15 @@ interface AppNonceInterface
      * @param integer $appId
      * @param string $nonce
      * @param \DateTime $datetime
-     * @return AppNonce
+     * @return AppNonceEntity
      */
-    public function find($appId, $nonce, DateTime $datetime);
+    public function find($appId, $nonce, DateTime $dateTime);
 
     /**
-     * @param AppNonce $appNonce
+     * @param AppNonceEntity $appNonce
      * @return null
      */
-    public function save(AppNonce $appNonce);
+    public function save(AppNonceEntity $appNonce);
 
 
 }

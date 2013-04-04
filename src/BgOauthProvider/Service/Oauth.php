@@ -2,31 +2,35 @@
 
 namespace BgOauthProvider\Service;
 
-use Doctrine\ORM\EntityManager;
 use BgOauthProvider\Entity\AppNonce;
 use BgOauthProvider\Entity\Token;
+use Doctrine\ORM\EntityManager;
+use BgOauthProvider\Mapper\AppNonceInterface as AppNonceMapper;
 
 class Oauth implements OauthInterface
 {
 
-    protected $em;
+    /**
+     * @var AppNonceMapper
+     */
+    protected $appNounceMapper;
 
 
-    public function __construct(EntityManager $em)
+    public function __construct(AppNonceMapper $appNounceMapper, EntityManager $em)
     {
         $this->setEm($em);
+
+        $this->appNounceMapper = $appNounceMapper;
     }
 
     public function findNonce($appId, $nonce, \DateTime $dateTime)
     {
-        return $this->getEm()->getRepository('BgOauthProvider\Entity\AppNonce')
-            ->findOneBy(array('app' => $appId, 'nonce' => $nonce, 'timestamp' => $dateTime));
+        return $this->appNounceMapper->find($appId, $nonce, $dateTime);
     }
 
     public function saveAppNonce(AppNonce $appNonce)
     {
-        $this->getEm()->persist($appNonce);
-        $this->getEm()->flush();
+        $this->appNounceMapper->save($appNonce);
     }
 
     public function saveToken(Token $token)
@@ -45,11 +49,27 @@ class Oauth implements OauthInterface
         return $this->getEm()->getRepository('BgOauthProvider\Entity\Token')->findOneBy(array('token' => $token));
     }
 
+
+
+
+
+
+    /**
+     * @depricated
+     */
+    protected $em;
+
+    /**
+     * @depricated
+     */
     public function getEm()
     {
         return $this->em;
     }
 
+    /**
+     * @depricated
+     */
     public function setEm(EntityManager $em)
     {
         $this->em = $em;
