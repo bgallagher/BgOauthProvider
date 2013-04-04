@@ -14,8 +14,10 @@ interface OauthInterface
 
     public function saveToken(Token $token);
 
+    public function updateToken(Token $token);
+
     public function findToken($token);
 
-    public function updateToken(Token $token);
+    public function findAppByConsumerKey($consumerKey);
 
 }
