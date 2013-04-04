@@ -4,10 +4,10 @@ namespace BgOauthProvider\Oauth;
 
 use BgOauthProvider\Entity\Token;
 use \BgOauthProvider\Service\OauthInterface;
-use \BgOauthProvider\Service\AppInterface;
-use \BgOauthProvider\Entity\AppNonce;
-use \BgOauthProvider\Entity\TokenInterface;
-use \BgOauthProvider\Entity\AppInterface as AppEntityInterface;
+use \BgOauthProvider\Entity\AppNonce as AppNonceEntity;
+use \BgOauthProvider\Entity\TokenInterface as TokenEntity;
+use \BgOauthProvider\Entity\AppInterface as AppEntity;
+use \ZfcUser\Entity\User as UserEntity;
 use \OAuthProvider;
 
 /**
@@ -19,8 +19,19 @@ use \OAuthProvider;
 class Provider
 {
 
+    /**
+     * @var AppEntity
+     */
     public $app;
+
+    /**
+     * @var UserEntity
+     */
     public $user;
+
+    /**
+     * @var TokenEntity
+     */
     public $token;
 
     /**
@@ -35,11 +46,11 @@ class Provider
 
     /**
      * @param OauthInterface $oauthService
-     * @param TokenInterface $token
+     * @param TokenEntity $token
      */
     public function __construct(OauthInterface $oauthService)
     {
-        $this->setOauthService($oauthService);
+        $this->oauthService = $oauthService;
         $this->token = new Token();
     }
 
@@ -102,11 +113,11 @@ class Provider
             $this->app = $this->oauthService->findAppByConsumerKey($provider->consumer_key);
         }
 
-        if (!($this->app instanceof AppEntityInterface)) {
+        if (!($this->app instanceof AppEntity)) {
             return OAUTH_CONSUMER_KEY_UNKNOWN;
         }
 
-        if ($this->app->getStatus() != AppEntityInterface::APP_ACTIVE) {
+        if ($this->app->getStatus() != AppEntity::APP_ACTIVE) {
             return OAUTH_CONSUMER_KEY_REFUSED;
         }
 
@@ -141,7 +152,7 @@ class Provider
             return OAUTH_BAD_NONCE;
         }
 
-        $appNonce = new AppNonce();
+        $appNonce = new AppNonceEntity();
         $appNonce->setNonce($provider->nonce);
         $appNonce->setApp($this->app);
         $appNonce->setTimestamp($dateTime);
@@ -165,9 +176,9 @@ class Provider
 
         $this->token = $oauthService->findToken($provider->token);
 
-        if (!($this->token instanceof TokenInterface)) {
+        if (!($this->token instanceof TokenEntity)) {
             return OAUTH_TOKEN_REJECTED;
-        } elseif ($this->token->getType() == TokenInterface::TOKEN_REQUEST && $this->token->getVerifier() != $provider->verifier) {
+        } elseif ($this->token->getType() == TokenEntity::TOKEN_REQUEST && $this->token->getVerifier() != $provider->verifier) {
             return OAUTH_VERIFIER_INVALID;
         } elseif ($this->app->getId() !== $this->token->getApp()->getId()) {
             return OAUTH_TOKEN_REJECTED;
@@ -195,11 +206,11 @@ class Provider
     /**
      * Populates and saves the constructor injected Token instance.
      *
-     * @return \BgOauthProvider\Entity\TokenInterface
+     * @return \BgOauthProvider\Entity\TokenEntity
      */
     public function saveRequestToken()
     {
-        $this->token->setType(TokenInterface::TOKEN_REQUEST);
+        $this->token->setType(TokenEntity::TOKEN_REQUEST);
         $this->token->setApp($this->app);
         $this->token->setToken($this->generateRandomHash());
         $this->token->setTokenSecret($this->generateRandomHash());
@@ -213,22 +224,17 @@ class Provider
     /**
      * Modifies and saves the token found by _tokenHandler
      *
-     * @return \BgOauthProvider\Entity\TokenInterface
+     * @return \BgOauthProvider\Entity\TokenEntity
      */
     public function saveAccessToken()
     {
-        $this->token->setType(TokenInterface::TOKEN_ACCESS);
+        $this->token->setType(TokenEntity::TOKEN_ACCESS);
         $this->token->setToken($this->generateRandomHash());
         $this->token->setTokenSecret($this->generateRandomHash());
 
         $this->oauthService->updateToken($this->token);
 
         return $this->token;
-    }
-
-    public function setOauthService(OauthInterface $oauthService)
-    {
-        $this->oauthService = $oauthService;
     }
 
 }
