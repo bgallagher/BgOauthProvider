@@ -2,13 +2,14 @@
 
 namespace BgOauthProvider\Oauth;
 
+use BgOauthProvider\Entity\AppInterface as AppEntity;
+use BgOauthProvider\Entity\AppNonce as AppNonceEntity;
 use BgOauthProvider\Entity\Token;
-use \BgOauthProvider\Service\OauthInterface;
-use \BgOauthProvider\Entity\AppNonce as AppNonceEntity;
-use \BgOauthProvider\Entity\TokenInterface as TokenEntity;
-use \BgOauthProvider\Entity\AppInterface as AppEntity;
-use \ZfcUser\Entity\User as UserEntity;
-use \OAuthProvider;
+use BgOauthProvider\Entity\TokenInterface as TokenEntity;
+use BgOauthProvider\Service\OauthInterface;
+use DateTime;
+use OAuthProvider;
+use ZfcUser\Entity\User as UserEntity;
 
 /**
  * OAuth 1.0a provider service
@@ -143,7 +144,7 @@ class Provider
             return OAUTH_BAD_TIMESTAMP;
         }
 
-        $dateTime = new \DateTime();
+        $dateTime = new DateTime();
         $dateTime->setTimestamp($this->_getProvider()->timestamp);
 
         $oldNonce = $oauthService->findNonce($this->app->getId(), $provider->nonce, $dateTime);
