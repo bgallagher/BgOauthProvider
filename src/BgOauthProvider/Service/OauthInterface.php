@@ -8,7 +8,6 @@ use BgOauthProvider\Entity\Token;
 interface OauthInterface
 {
 
-
     public function findNonce($appId, $nonce, \DateTime $dateTime);
 
     public function saveAppNonce(AppNonce $appNonce);

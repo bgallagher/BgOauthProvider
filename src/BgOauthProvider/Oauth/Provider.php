@@ -19,26 +19,27 @@ use \OAuthProvider;
 class Provider
 {
 
-    /**
-     * @var \BgOauthProvider\Entity\App;
-     */
     public $app;
     public $user;
     public $token;
 
+    /**
+     * @var OauthInterface
+     */
     protected $oauthService;
-    protected $appService;
+
+    /**
+     * @var OAuthProvider
+     */
     protected $provider;
 
     /**
-     * @param \BgOauthProvider\Service\OauthInterface $oauthService
-     * @param \BgOauthProvider\Service\AppInterface $appService
-     * @param \BgOauthProvider\Entity\TokenInterface $token
+     * @param OauthInterface $oauthService
+     * @param TokenInterface $token
      */
-    public function __construct(OauthInterface $oauthService, AppInterface $appService)
+    public function __construct(OauthInterface $oauthService)
     {
         $this->setOauthService($oauthService);
-        $this->setAppService($appService);
         $this->token = new Token();
     }
 
@@ -96,10 +97,9 @@ class Provider
      */
     public function _consumerHandler(OAuthProvider $provider)
     {
-        $appService = $this->appService;
 
         if (null === $this->app) {
-            $this->app = $appService->findAppByConsumerKey($provider->consumer_key);
+            $this->app = $this->oauthService->findAppByConsumerKey($provider->consumer_key);
         }
 
         if (!($this->app instanceof AppEntityInterface)) {
@@ -229,11 +229,6 @@ class Provider
     public function setOauthService(OauthInterface $oauthService)
     {
         $this->oauthService = $oauthService;
-    }
-
-    public function setAppService(AppInterface $appService)
-    {
-        $this->appService = $appService;
     }
 
 }

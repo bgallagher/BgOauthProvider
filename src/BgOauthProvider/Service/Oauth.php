@@ -2,11 +2,14 @@
 
 namespace BgOauthProvider\Service;
 
+use BgOauthProvider\Entity\App;
 use BgOauthProvider\Entity\AppNonce;
 use BgOauthProvider\Entity\Token;
-use Doctrine\ORM\EntityManager;
+use BgOauthProvider\Mapper\AppInterface as AppMapper;
 use BgOauthProvider\Mapper\AppNonceInterface as AppNonceMapper;
 use BgOauthProvider\Mapper\TokenInterface as TokenMapper;
+use DateTime;
+use Doctrine\ORM\EntityManager;
 
 class Oauth implements OauthInterface
 {
@@ -21,28 +24,53 @@ class Oauth implements OauthInterface
      */
     protected $tokenMapper;
 
+    /**
+     * @var AppMapper
+     */
+    protected $appMapper;
 
-    public function __construct(AppNonceMapper $appNounceMapper, TokenMapper $tokenMapper)
+    /**
+     * @param AppNonceMapper $appNounceMapper
+     * @param TokenMapper $tokenMapper
+     */
+    public function __construct(AppNonceMapper $appNounceMapper, TokenMapper $tokenMapper, AppMapper $appMapper)
     {
         $this->appNounceMapper = $appNounceMapper;
         $this->tokenMapper = $tokenMapper;
+        $this->appMapper = $appMapper;
     }
 
-    public function findNonce($appId, $nonce, \DateTime $dateTime)
+    /**
+     * @param int $appId
+     * @param string $nonce
+     * @param DateTime $dateTime
+     * @return AppNonce
+     */
+    public function findNonce($appId, $nonce, DateTime $dateTime)
     {
         return $this->appNounceMapper->find($appId, $nonce, $dateTime);
     }
 
+    /**
+     * @param AppNonce $appNonce
+     */
     public function saveAppNonce(AppNonce $appNonce)
     {
         $this->appNounceMapper->save($appNonce);
     }
 
+    /**
+     * @param Token $token
+     * @return null
+     */
     public function saveToken(Token $token)
     {
         return $this->tokenMapper->insert($token);
     }
 
+    /**
+     * @param Token $token
+     */
     public function updateToken(Token $token)
     {
         $this->tokenMapper->update($token);
@@ -55,5 +83,14 @@ class Oauth implements OauthInterface
     public function findToken($token)
     {
         return $this->tokenMapper->findByToken($token);
+    }
+
+    /**
+     * @param $consumerKey
+     * @return App|null
+     */
+    public function findAppByConsumerKey($consumerKey)
+    {
+        return $this->appMapper->findAppByConsumerKey($consumerKey);
     }
 }
