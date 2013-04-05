@@ -2,12 +2,12 @@
 
 namespace BgOauthProvider;
 
+
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
-use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Controller\ControllerManager;
-use Zend\ServiceManager\ServiceManager;
-
+use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Module implements AutoloaderProviderInterface, ServiceProviderInterface
 {
@@ -44,42 +44,42 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
     {
         return array(
             'factories' => array(
-                'BgOauthProvider\Options' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\Options' => function (ServiceLocatorInterface $serviceLocator) {
                     $config = $serviceLocator->get('Config');
                     return new Options\ModuleOptions(isset($config['bgoauthprovider']) ? $config['bgoauthprovider'] : array());
                 },
-                'BgOauthProvider\Mapper\AppNonce' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\Mapper\AppNonce' => function (ServiceLocatorInterface $serviceLocator) {
                     return new \BgOauthProvider\Mapper\Doctrine\AppNonce(
                         $serviceLocator->get('doctrine.entitymanager.orm_default')
                     );
                 },
-                'BgOauthProvider\Mapper\Token' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\Mapper\Token' => function (ServiceLocatorInterface $serviceLocator) {
                     return new \BgOauthProvider\Mapper\Doctrine\Token(
                         $serviceLocator->get('doctrine.entitymanager.orm_default')
                     );
                 },
-                'BgOauthProvider\Mapper\App' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\Mapper\App' => function (ServiceLocatorInterface $serviceLocator) {
                     return new \BgOauthProvider\Mapper\Doctrine\App(
                         $serviceLocator->get('doctrine.entitymanager.orm_default')
                     );
                 },
-                'BgOauthProvider\OauthService' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\OauthService' => function (ServiceLocatorInterface $serviceLocator) {
                     return new \BgOauthProvider\Service\Oauth(
                         $serviceLocator->get('BgOauthProvider\Mapper\AppNonce'),
                         $serviceLocator->get('BgOauthProvider\Mapper\Token'),
                         $serviceLocator->get('BgOauthProvider\Mapper\App')
                     );
                 },
-                'BgOauthProvider\OauthProvider' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\OauthProvider' => function (ServiceLocatorInterface $serviceLocator) {
                     return new \BgOauthProvider\Oauth\Provider(
                         $serviceLocator->get('BgOauthProvider\OauthService')
                     );
                 },
-                'BgOauthProvider\Acl' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\Acl' => function (ServiceLocatorInterface $serviceLocator) {
                     $aclConfig = $serviceLocator->get('BgOauthProvider\Options')->getAclConfig();
                     return new \BgOauthProvider\Acl($aclConfig);
                 },
-                'BgOauthProvider\RouteGuard' => function (ServiceManager $serviceLocator) {
+                'BgOauthProvider\RouteGuard' => function (ServiceLocatorInterface $serviceLocator) {
                     return new \BgOauthProvider\Guard\Route(
                         $serviceLocator->get('BgOauthProvider\Acl'),
                         $serviceLocator->get('BgOauthProvider\OauthProvider')
@@ -93,7 +93,7 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
     {
         return array(
             'factories' => array(
-                'BgOauthProvider\Controller\Oauth' => function(ControllerManager $controllerManager) {
+                'BgOauthProvider\Controller\Oauth' => function (ControllerManager $controllerManager) {
                     $serviceManager = $controllerManager->getServiceLocator();
 
                     return new \BgOauthProvider\Controller\OauthController(
