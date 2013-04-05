@@ -19,5 +19,4 @@ return array(
     'BgOauthProvider\Oauth\Provider'             => __DIR__ . '/src/BgOauthProvider/Oauth/Provider.php',
     'BgOauthProvider\Options\ModuleOptions'      => __DIR__ . '/src/BgOauthProvider/Options/ModuleOptions.php',
     'BgOauthProvider\Service\Oauth'              => __DIR__ . '/src/BgOauthProvider/Service/Oauth.php',
-    'BgOauthProvider\Service\OauthInterface'     => __DIR__ . '/src/BgOauthProvider/Service/OauthInterface.php',
 );
