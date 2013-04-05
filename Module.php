@@ -96,12 +96,11 @@ class Module implements AutoloaderProviderInterface, ServiceProviderInterface
                 'BgOauthProvider\Controller\Oauth' => function(ControllerManager $controllerManager) {
                     $serviceManager = $controllerManager->getServiceLocator();
 
-                    $controller = new \BgOauthProvider\Controller\OauthController();
-                    $controller->setOauthService($serviceManager->get('BgOauthProvider\OauthService'));
-                    $controller->setOauthProvider($serviceManager->get('BgOauthProvider\OauthProvider'));
-                    $controller->setOptions($serviceManager->get('BgOauthProvider\Options'));
-
-                    return $controller;
+                    return new \BgOauthProvider\Controller\OauthController(
+                        $serviceManager->get('BgOauthProvider\OauthService'),
+                        $serviceManager->get('BgOauthProvider\OauthProvider'),
+                        $serviceManager->get('BgOauthProvider\Options')
+                    );
                 }
             ),
         );

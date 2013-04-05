@@ -29,6 +29,13 @@ class OauthController extends AbstractActionController
 
     protected $failedLoginMessage = 'Authentication failed. Please try again.';
 
+    public function __construct($oauthService, $oauthProvider, ModuleOptions $options)
+    {
+        $this->oauthService = $oauthProvider;
+        $this->oauthProvider = $oauthProvider;
+        $this->options = $options;
+    }
+
     public function indexAction()
     {
 
@@ -43,7 +50,7 @@ class OauthController extends AbstractActionController
 
     public function requestTokenAction()
     {
-        $oauthProvider = $this->getOauthProvider();
+        $oauthProvider = $this->oauthProvider;
         $response = $this->getResponse();
 
         try {
@@ -75,8 +82,8 @@ class OauthController extends AbstractActionController
 
     public function authorizeAction()
     {
-        $oauthService = $this->getOauthService();
-        $oauthProvider = $this->getOauthProvider();
+        $oauthService = $this->oauthService;
+        $oauthProvider = $this->oauthProvider;
 
         $request = $this->getRequest();
 
@@ -186,7 +193,7 @@ class OauthController extends AbstractActionController
         ));
 
         $viewModel->setTerminal(
-            $this->getOptions()->getDisableLayoutOnAuthorisationPage()
+            $this->options->getDisableLayoutOnAuthorisationPage()
         );
 
         return $viewModel;
@@ -194,7 +201,7 @@ class OauthController extends AbstractActionController
 
     public function accessTokenAction()
     {
-        $oauthProvider = $this->getOauthProvider();
+        $oauthProvider = $this->oauthProvider;
         $response = $this->getResponse();
 
         try {
@@ -221,52 +228,4 @@ class OauthController extends AbstractActionController
         return $response;
     }
 
-    /**
-     * @param \BgOauthProvider\Service\Oauth $oauthService
-     */
-    public function setOauthService(OauthService $oauthService)
-    {
-        $this->oauthService = $oauthService;
-    }
-
-    /**
-     * @return \BgOauthProvider\Service\Oauth
-     */
-    public function getOauthService()
-    {
-        return $this->oauthService;
-    }
-
-
-    /**
-     * @param \BgOauthProvider\Oauth\Provider $oauthProvider
-     */
-    public function setOauthProvider(OauthProvider $oauthProvider)
-    {
-        $this->oauthProvider = $oauthProvider;
-    }
-
-    /**
-     * @return \BgOauthProvider\Oauth\Provider
-     */
-    public function getOauthProvider()
-    {
-        return $this->oauthProvider;
-    }
-
-    /**
-     * @param \BgOauthProvider\Options\ModuleOptions $options
-     */
-    public function setOptions(ModuleOptions $options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * @return \BgOauthProvider\Options\ModuleOptions
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
 }
