@@ -11,7 +11,7 @@ use BgOauthProvider\Mapper\TokenInterface as TokenMapper;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 
-class Oauth implements OauthInterface
+class Oauth
 {
 
     /**

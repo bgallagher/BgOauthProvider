@@ -29,9 +29,9 @@ class OauthController extends AbstractActionController
 
     protected $failedLoginMessage = 'Authentication failed. Please try again.';
 
-    public function __construct($oauthService, $oauthProvider, ModuleOptions $options)
+    public function __construct(OauthService $oauthService, OauthProvider $oauthProvider, ModuleOptions $options)
     {
-        $this->oauthService = $oauthProvider;
+        $this->oauthService = $oauthService;
         $this->oauthProvider = $oauthProvider;
         $this->options = $options;
     }

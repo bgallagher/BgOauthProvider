@@ -6,7 +6,7 @@ use BgOauthProvider\Entity\AppInterface as AppEntity;
 use BgOauthProvider\Entity\AppNonce as AppNonceEntity;
 use BgOauthProvider\Entity\Token;
 use BgOauthProvider\Entity\TokenInterface as TokenEntity;
-use BgOauthProvider\Service\OauthInterface;
+use BgOauthProvider\Service\Oauth as OauthService;
 use DateTime;
 use OAuthProvider;
 use ZfcUser\Entity\User as UserEntity;
@@ -49,7 +49,7 @@ class Provider
      * @param OauthInterface $oauthService
      * @param TokenEntity $token
      */
-    public function __construct(OauthInterface $oauthService)
+    public function __construct(OauthService $oauthService)
     {
         $this->oauthService = $oauthService;
         $this->token = new Token();
