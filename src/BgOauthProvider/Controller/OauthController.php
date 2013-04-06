@@ -36,18 +36,6 @@ class OauthController extends AbstractActionController
         $this->options = $options;
     }
 
-    public function indexAction()
-    {
-
-        $result = new JsonModel(
-            array(
-                'action' => 'index',
-            )
-        );
-
-        return $result;
-    }
-
     public function requestTokenAction()
     {
         $oauthProvider = $this->oauthProvider;
@@ -206,11 +194,11 @@ class OauthController extends AbstractActionController
 
         try {
             $oauthProvider->checkOAuthRequest();
-            $requestToken = $oauthProvider->saveAccessToken();
+            $accessToken = $oauthProvider->saveAccessToken();
 
             $responseUrl = array();
-            $responseUrl['oauth_token'] = $requestToken->getToken();
-            $responseUrl['oauth_token_secret'] = $requestToken->getTokenSecret();
+            $responseUrl['oauth_token'] = $accessToken->getToken();
+            $responseUrl['oauth_token_secret'] = $accessToken->getTokenSecret();
 
             $response->setContent(http_build_query($responseUrl));
 
