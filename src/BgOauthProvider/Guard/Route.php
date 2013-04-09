@@ -39,6 +39,14 @@ class Route implements ListenerAggregateInterface
         $request = $mvcEvent->getRequest();
         $response = $mvcEvent->getResponse();
 
+        /**
+         * If it's a CLI request - return.
+         */
+        if($request instanceof \Zend\Console\Request)
+        {
+            return;
+        }
+
         $app = $mvcEvent->getApplication();
         $match = $app->getMvcEvent()->getRouteMatch();
         $routeName = $match->getMatchedRouteName();
