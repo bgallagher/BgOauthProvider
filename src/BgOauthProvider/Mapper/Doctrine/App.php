@@ -2,10 +2,9 @@
 
 namespace BgOauthProvider\Mapper\Doctrine;
 
-use BgOauthProvider\Mapper\AppInterface;
 use BgOauthProvider\Entity\App as AppEntity;
+use BgOauthProvider\Mapper\AppInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 
 class App implements AppInterface
 {
@@ -24,13 +23,33 @@ class App implements AppInterface
     }
 
     /**
-     * @param string $consumerKey
-     * @return AppEntity
+     * @inheritdoc
      */
     public function findAppByConsumerKey($consumerKey)
     {
         return $this->getObjectManager()->getRepository('BgOauthProvider\Entity\App')
             ->findOneBy(array('consumer_key' => $consumerKey));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findAppById($id)
+    {
+        return $this->getObjectManager()->getRepository('BgOauthProvider\Entity\App')->find($id);
+    }
+
+    /**
+     * @param AppEntity $app
+     * @param bool $flush
+     */
+    public function createApp(AppEntity $app, $flush = true)
+    {
+        $this->getObjectManager()->persist($app);
+
+        if ($flush) {
+            $this->getObjectManager()->flush();
+        }
     }
 
     /**

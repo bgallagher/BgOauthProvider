@@ -8,8 +8,14 @@ interface AppInterface {
 
     /**
      * @param string $consumerKey
-     * @return AppEntity
+     * @return null|AppEntity
      */
     public function findAppByConsumerKey($consumerKey);
+
+    /**
+     * @param int $id
+     * @return null|AppEntity
+     */
+    public function findAppById($id);
 
 }
