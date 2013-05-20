@@ -2,7 +2,9 @@
 
 namespace BgOauthProvider\Mapper;
 
-use \BgOauthProvider\Entity\TokenInterface as TokenEntity;
+use BgOauthProvider\Entity\TokenInterface as TokenEntity;
+use ZfcUser\Entity\UserInterface as UserEntity;
+use BgOauthProvider\Entity\AppInterface as AppEntity;
 
 
 interface TokenInterface
@@ -26,5 +28,10 @@ interface TokenInterface
      */
     public function findByToken($token);
 
-
+    /**
+     * @param UserEntity $user
+     * @param AppEntity $app
+     * @return int
+     */
+    public function getCountOfAccessTokens(UserEntity $user, AppEntity $app);
 }

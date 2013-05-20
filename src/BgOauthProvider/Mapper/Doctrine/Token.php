@@ -3,10 +3,13 @@
 namespace BgOauthProvider\Mapper\Doctrine;
 
 
+use BgOauthProvider\Entity\AppInterface as AppEntity;
+use BgOauthProvider\Entity\TokenInterface as TokenEntity;
 use BgOauthProvider\Mapper\TokenInterface;
-use \BgOauthProvider\Entity\TokenInterface as TokenEntity;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\QueryBuilder;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use ZfcUser\Entity\UserInterface as UserEntity;
 
 class Token implements TokenInterface, ObjectManagerAwareInterface
 {
@@ -71,5 +74,26 @@ class Token implements TokenInterface, ObjectManagerAwareInterface
     public function getObjectManager()
     {
         return $this->objectManager;
+    }
+
+    /**
+     * @param UserEntity $user
+     * @param AppEntity $app
+     * @return int
+     */
+    public function getCountOfAccessTokens(UserEntity $user, AppEntity $app)
+    {
+        /** @var QueryBuilder $qb */
+        $qb = $this->getObjectManager()->createQueryBuilder();
+
+        $qb->select("COUNT(t.id)")
+            ->from('BgOauthProvider\Entity\Token', 't')
+            ->where('t.type = ' . TokenEntity::TOKEN_ACCESS)
+            ->andWhere('t.user = :user')
+            ->andWhere('t.app = :app')
+            ->setParameter('user', $user)
+            ->setParameter('app', $app);
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

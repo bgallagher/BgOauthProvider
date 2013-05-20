@@ -10,6 +10,7 @@ use BgOauthProvider\Mapper\AppNonceInterface as AppNonceMapper;
 use BgOauthProvider\Mapper\TokenInterface as TokenMapper;
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use ZfcUser\Entity\UserInterface as User;
 
 class Oauth
 {
@@ -92,5 +93,23 @@ class Oauth
     public function findAppByConsumerKey($consumerKey)
     {
         return $this->appMapper->findAppByConsumerKey($consumerKey);
+    }
+
+    /**
+     * @param User $user
+     * @param App $app
+     * @return bool
+     */
+    public function isRepeatAuthorization(User $user, App $app)
+    {
+        $isRepeat = false;
+
+        $count = $this->tokenMapper->getCountOfAccessTokens($user, $app);
+
+        if(is_numeric($count) && $count > 0) {
+            $isRepeat = true;
+        }
+
+        return $isRepeat;
     }
 }
