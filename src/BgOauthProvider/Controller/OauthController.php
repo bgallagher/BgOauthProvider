@@ -3,10 +3,9 @@
 namespace BgOauthProvider\Controller;
 
 use BgOauthProvider\Oauth\Provider as OauthProvider;
-use BgOauthProvider\Service\Oauth as OauthService;
 use BgOauthProvider\Options\ModuleOptions;
+use BgOauthProvider\Service\Oauth as OauthService;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 class OauthController extends AbstractActionController
@@ -59,9 +58,11 @@ class OauthController extends AbstractActionController
             $error = \OAuthProvider::reportProblem($e);
             $response->setStatusCode(400);
             $response->setContent($error);
-            $response->getHeaders()->addHeaders(array(
-                'WWW-Authenticate' => $error,
-            ));
+            $response->getHeaders()->addHeaders(
+                array(
+                    'WWW-Authenticate' => $error,
+                )
+            );
 
         }
 
@@ -92,17 +93,19 @@ class OauthController extends AbstractActionController
          * add a deny buton, and change submit to allow
          */
         $form = $this->getServiceLocator()->get('zfcuser_login_form');
-        $form->add(array(
-            'name' => 'deny',
-            'attributes' => array(
-                'type' => 'submit',
-                'value' => 'true',
-                'id' => 'deny-button',
-            ),
-            'options' => array(
-                'label' => 'deny',
+        $form->add(
+            array(
+                'name' => 'deny',
+                'attributes' => array(
+                    'type' => 'submit',
+                    'value' => 'true',
+                    'id' => 'deny-button',
+                ),
+                'options' => array(
+                    'label' => 'deny',
+                )
             )
-        ));
+        );
 
         if ($hasIdentity) {
             $form->get("submit")->setLabel('allow');
@@ -112,7 +115,6 @@ class OauthController extends AbstractActionController
             $form->get("submit")->setLabel('login and allow');
         }
 
-
         $fm = $this->flashMessenger()->setNamespace('bgoauthprovider-authorisation-form')->getMessages();
         if (isset($fm[0])) {
             $form->setMessages(
@@ -120,64 +122,78 @@ class OauthController extends AbstractActionController
             );
         }
 
-
-        if ($request->isPost()) {
+        /**
+         * Attempt login.
+         */
+        if ($request->isPost() && !$hasIdentity) {
 
             if ($request->getPost()->get('deny')) {
                 die('denied');
             }
 
-            if (!$hasIdentity) {
+            $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
+            $adapter->prepareForAuthentication($request);
+            $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
 
-                $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
-                $adapter->prepareForAuthentication($request);
-                $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
-
-                /**
-                 * This needs to change!
-                 */
-                if (!$auth->isValid()) {
-                    $this->flashMessenger()->setNamespace('bgoauthprovider-authorisation-form')->addMessage($this->failedLoginMessage);
-                    $adapter->resetAdapters();
-                    return $this->redirect()->toUrl(
-                        $this->url()->fromRoute('bgoauthprovider/v1/authorize')
-                            . '?' . http_build_query(array('oauth_token' => $oauth_token))
-                    );
-                }
-
+            /**
+             * Redirect back if login fails.
+             */
+            if (!$auth->isValid()) {
+                $this->flashMessenger()->setNamespace('bgoauthprovider-authorisation-form')->addMessage(
+                    $this->failedLoginMessage
+                );
+                $adapter->resetAdapters();
+                return $this->redirect()->toUrl(
+                    $this->url()->fromRoute('bgoauthprovider/v1/authorize')
+                    . '?' . http_build_query(array('oauth_token' => $oauth_token))
+                );
+            } else {
+                $hasIdentity = true;
             }
+        }
+
+        /**
+         * Processing OAuth authorisation request...
+         */
+        if ($hasIdentity) {
 
             $user = $this->zfcUserAuthentication()->getIdentity();
 
-            //do oauth stuff here
-            $verifier = $oauthProvider->generateRandomHash();
+            if ($request->isPost() || $this->oauthService->isRepeatAuthorization($user, $app)) {
 
-            $token->setVerifier($verifier);
-            $token->setUser($user);
-            $oauthService->updateToken($token);
+                $verifier = $oauthProvider->generateRandomHash();
 
-            $callback = $token->getCallbackUrl();
+                $token->setVerifier($verifier);
+                $token->setUser($user);
+                $oauthService->updateToken($token);
 
-            $queryStringParams = array();
-            $queryStringParams['oauth_token'] = $request->getQuery()->get('oauth_token');
-            $queryStringParams['oauth_verifier'] = $token->getVerifier();
-            $queryStringParams['oauth_callback_confirmed'] = "true";
-            $queryString = http_build_query($queryStringParams);
+                $callback = $token->getCallbackUrl();
 
-            $parsedCallback = parse_url($callback);
+                $queryStringParams = array();
+                $queryStringParams['oauth_token'] = $request->getQuery()->get('oauth_token');
+                $queryStringParams['oauth_verifier'] = $token->getVerifier();
+                $queryStringParams['oauth_callback_confirmed'] = "true";
+                $queryString = http_build_query($queryStringParams);
 
-            $callback .= (isset($parsedCallback['query']) ? '&' : '?') . $queryString;
+                $parsedCallback = parse_url($callback);
 
-            return $this->redirect()->toUrl($callback);
+                $callback .= (isset($parsedCallback['query']) ? '&' : '?') . $queryString;
+
+                return $this->redirect()->toUrl($callback);
+
+            }
 
         }
+
+        //Falling through to the view.
 
         $viewModel = new ViewModel(array(
             'authenticationForm' => $form,
             'app' => $app,
             'selfUrl' => $this->url()->fromRoute(
-                'bgoauthprovider/v1/authorize') . '?' . http_build_query($this->params()->fromQuery()
-            ),
+                'bgoauthprovider/v1/authorize'
+            )
+            . '?' . http_build_query($this->params()->fromQuery()),
         ));
 
         $viewModel->setTerminal(
@@ -207,9 +223,11 @@ class OauthController extends AbstractActionController
 
             $response->setStatusCode(400);
             $response->setContent($error);
-            $response->getHeaders()->addHeaders(array(
-                'WWW-Authenticate' => $error,
-            ));
+            $response->getHeaders()->addHeaders(
+                array(
+                    'WWW-Authenticate' => $error,
+                )
+            );
 
         }
 
