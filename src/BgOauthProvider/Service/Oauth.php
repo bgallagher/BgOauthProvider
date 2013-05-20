@@ -102,14 +102,8 @@ class Oauth
      */
     public function isRepeatAuthorization(User $user, App $app)
     {
-        $isRepeat = false;
-
         $count = $this->tokenMapper->getCountOfAccessTokens($user, $app);
 
-        if(is_numeric($count) && $count > 0) {
-            $isRepeat = true;
-        }
-
-        return $isRepeat;
+        return (is_numeric($count) && $count > 0) ? true : false;
     }
 }
