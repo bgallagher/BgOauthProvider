@@ -216,6 +216,7 @@ class Provider
         $this->token->setToken($this->generateRandomHash());
         $this->token->setTokenSecret($this->generateRandomHash());
         $this->token->setCallbackUrl($this->provider->callback);
+        $this->token->setTimestamp(new DateTime());
 
         $this->oauthService->saveToken($this->token);
 

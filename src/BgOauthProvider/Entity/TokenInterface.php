@@ -40,4 +40,8 @@ interface TokenInterface
 
     public function getUser();
 
+    public function getTimestamp();
+
+    public function setTimestamp($timestamp);
+
 }

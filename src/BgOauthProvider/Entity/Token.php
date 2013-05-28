@@ -23,6 +23,8 @@ class Token implements TokenInterface
 
     private $app;
 
+    private $timestamp;
+
     /**
      * Get id
      *
@@ -186,4 +188,22 @@ class Token implements TokenInterface
     {
         return $this->app;
     }
+
+    /**
+     * @param Datetime $timestamp
+     */
+    public function setTimestamp($timestamp)
+    {
+        $this->timestamp = $timestamp;
+    }
+
+    /**
+     * @return Datetime
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
+    }
+
+
 }
