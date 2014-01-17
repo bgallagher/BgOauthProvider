@@ -20,6 +20,14 @@ class App implements AppInterface
     private $url;
 
     private $status;
+    
+    /**
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * Get id
