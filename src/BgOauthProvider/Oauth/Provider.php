@@ -140,7 +140,7 @@ class Provider
 
         $oauthService = $this->oauthService;
 
-        if ($this->_getProvider()->timestamp < time() - 5 * 60) {
+        if ($this->_getProvider()->timestamp < time() - 30 * 60) {
             return OAUTH_BAD_TIMESTAMP;
         }
 
